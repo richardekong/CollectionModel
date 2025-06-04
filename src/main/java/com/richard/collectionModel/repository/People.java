@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface People extends CrudRepository<Person, Long>, PagingAndSortingRepository<Person, Long>, CollectionStatistic<Person> {
 
@@ -44,4 +45,8 @@ public interface People extends CrudRepository<Person, Long>, PagingAndSortingRe
         }
         return oldestPerson;
     }
+
+    Optional<Person> findByName(String name);
+
+    boolean existsByName(String person);
 }
