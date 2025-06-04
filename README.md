@@ -1,5 +1,6 @@
 # CollectionModel
-A challenge to model a collection of people
+A challenge to model a collection of people.
+
 Write code that models (in other words, represents) a collection of people (E.g., a club, class, or company). The code you write should be clean, simple, and reusable.
 
 Each person in the set of people has 2 properties:
