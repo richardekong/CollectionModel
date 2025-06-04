@@ -24,13 +24,14 @@ import java.util.Optional;
 @RequestMapping("/api/people")
 public class PersonController {
 
-    private People people;
+    private final People people;
 
     @Autowired
     public PersonController(People people) {
         this.people = people;
     }
 
+    @PostMapping
     private ResponseEntity<Void> createPerson(@RequestBody Person person, UriComponentsBuilder ucb){
         if (people.existsByName(person.getName())){
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -57,27 +58,15 @@ public class PersonController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping ResponseEntity<Person> findByName(@PathVariable String name){
-        Optional<Person> optionalPerson = people.findByName(name);
-        if(optionalPerson.isPresent()){
-            Person foundPerson = optionalPerson.get();
-            return ResponseEntity.ok(foundPerson);
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping
+    @GetMapping("/average")
     private ResponseEntity<Double> findAverageAge(){
-        Iterable<Person> personIterator = people.findAll();
-
-        List<Person> collection = getPeople(personIterator);
-        double averageAge = people.findAverageAge(collection);
+        double averageAge = people.findAverageAge(people.findAll());
         return ResponseEntity.ok(averageAge);
     }
 
-    @GetMapping
+    @GetMapping("/youngest")
     private ResponseEntity<Person> findYoungest(){
-        List<Person> collection = getPeople(people.findAll());
+        Iterable<Person> collection = people.findAll();
         Person youngest = people.findYoungest(collection);
         if(youngest != null){
             return ResponseEntity.ok(youngest);
@@ -85,9 +74,9 @@ public class PersonController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping
+    @GetMapping("/oldest")
     private ResponseEntity<Person> findOldest(){
-        List<Person> collection = getPeople(people.findAll());
+        Iterable<Person> collection = people.findAll();
         Person oldestPerson = people.findOldest(collection);
         if(oldestPerson != null){
             return ResponseEntity.ok(oldestPerson);
@@ -106,12 +95,5 @@ public class PersonController {
         return ResponseEntity.ok(page.getContent());
     }
 
-    private List<Person> getPeople(Iterable<Person> personIterator) {
-        List<Person> collection = new ArrayList<>();
-        while (personIterator.iterator().hasNext()){
-            collection.add(personIterator.iterator().next());
-        }
-        return collection;
-    }
 
 }

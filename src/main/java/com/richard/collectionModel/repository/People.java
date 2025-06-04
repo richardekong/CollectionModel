@@ -5,48 +5,47 @@ import com.richard.collectionModel.service.CollectionStatistic;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface People extends CrudRepository<Person, Long>, PagingAndSortingRepository<Person, Long>, CollectionStatistic<Person> {
 
     @Override
-    default double findAverageAge(List<Person> collection) {
-        int numberOfPeople = collection.size();
+    default double findAverageAge(Iterable<Person> collection) {
+        int numberOfPeople = 0;
         double totalAge = 0;
-        for (Person person : collection){
+        double average = 0.0;
+        for (Person person : collection) {
+            numberOfPeople++;
             totalAge += person.getAge();
         }
-        return totalAge / numberOfPeople;
+        if (numberOfPeople == 0) {
+            return average;
+        }
+        average = totalAge / numberOfPeople;
+        return  average;
     }
 
     @Override
-    default Person findOldest(List<Person> collection) {
-        Person oldestPerson = new Person(null, "", Integer.MIN_VALUE);
-        for (Person person : collection){
-            if (person!=null && (oldestPerson.getAge() < person.getAge())){
-                oldestPerson.setId(person.getId());
-                oldestPerson.setName(person.getName());
-                oldestPerson.setAge(person.getAge());
+    default Person findOldest(Iterable<Person> collection) {
+        Person oldestPerson = null;
+        for (Person person : collection) {
+            if (oldestPerson == null || oldestPerson.getAge() < person.getAge()) {
+                oldestPerson = person;
             }
         }
         return oldestPerson;
     }
 
     @Override
-    default Person findYoungest(List<Person> collection) {
-        Person oldestPerson = new Person(null, "", Integer.MAX_VALUE);
-        for (Person person : collection){
-            if (person!=null && (oldestPerson.getAge() > person.getAge())){
-                oldestPerson.setId(person.getId());
-                oldestPerson.setName(person.getName());
-                oldestPerson.setAge(person.getAge());
+    default Person findYoungest(Iterable<Person> collection) {
+        Person youngestPerson = null;
+        for (Person person : collection) {
+            if (youngestPerson == null || youngestPerson.getAge() > person.getAge()) {
+                youngestPerson = person;
             }
         }
-        return oldestPerson;
+        return youngestPerson;
     }
-
-    Optional<Person> findByName(String name);
 
     boolean existsByName(String person);
 }
