@@ -4,8 +4,8 @@ import java.util.List;
 
 public interface CollectionStatistic<T> {
 
-     double findAverage(List<T> collection);
-     T findOldest(T t);
-     T findYoungest(T t);
+     double findAverageAge(List<T> collection);
+     T findOldest(List<T> collection);
+     T findYoungest(List<T> collection);
 
 }
