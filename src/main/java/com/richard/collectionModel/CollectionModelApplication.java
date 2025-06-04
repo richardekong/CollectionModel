@@ -28,7 +28,7 @@ public class CollectionModelApplication {
 
             Iterable<Person> myPeople = peopleDB.findAll();
 
-            printPeopleFromDB(myPeople, "=============================\n\n\n");
+            printPeopleFromDB(myPeople);
 
             System.out.println("Saving more people to the database\n");
 
@@ -48,7 +48,7 @@ public class CollectionModelApplication {
 
             myPeople = peopleDB.findAll();
 
-            printPeopleFromDB(myPeople, "=============================\n");
+            printPeopleFromDB(myPeople);
 
             // calculate the average age
             printAverageAge(myPeople);
@@ -78,13 +78,13 @@ public class CollectionModelApplication {
         System.out.printf("Average Age: %f\n\n", peopleDB.findAverageAge(myPeople));
     }
 
-    private void printPeopleFromDB(Iterable<Person> myPeople, String s) {
+    private void printPeopleFromDB(Iterable<Person> myPeople) {
         System.out.print("ID\t\tName\t\tAge\n");
         System.out.print("=============================\n");
         for (Person person : myPeople) {
             System.out.printf("%d\t\t%s\t\t%d\n", person.getId(), person.getName(), person.getAge());
         }
-        System.out.print(s);
+        System.out.print("=============================\n");
     }
 
 }
