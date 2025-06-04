@@ -35,11 +35,11 @@ public class CollectionModelApplication {
             System.out.println("Creating the people ...\n");
 
             List<Person> people = List.of(
-                    new Person("Benson", 50),
-                    new Person("John", 40),
-                    new Person("Mary", 35),
-                    new Person("Peter", 20),
-                    new Person("Victor", 23)
+                    new Person(null,"Benson", 50),
+                    new Person(null, "John", 40),
+                    new Person(null,"Mary", 35),
+                    new Person(null,"Peter", 20),
+                    new Person(null,"Victor", 23)
             );
 
             peopleDB.saveAll(people);
@@ -64,13 +64,13 @@ public class CollectionModelApplication {
     private void printOldestPersonFromDB(Iterable<Person> myPeople) {
         System.out.println("The oldest Person is:\n");
         Person oldest = peopleDB.findOldest(myPeople);
-        System.out.printf("\t\tID: %d\n\t\tName: %s\n\t\tAge: %d\n\n", oldest.getId(), oldest.getName(), oldest.getAge());
+        System.out.printf("\t\tID: %d\n\t\tName: %s\n\t\tAge: %d\n\n", oldest.id(), oldest.name(), oldest.age());
     }
 
     private void printYoungestPersonFromDB(Iterable<Person> myPeople) {
         System.out.println("The Youngest Person is:\n");
         Person youngest = peopleDB.findYoungest(myPeople);
-        System.out.printf("\t\tID: %d\n\t\tName: %s\n\t\tAge: %d\n\n", youngest.getId(), youngest.getName(), youngest.getAge());
+        System.out.printf("\t\tID: %d\n\t\tName: %s\n\t\tAge: %d\n\n", youngest.id(), youngest.name(), youngest.age());
     }
 
     private void printAverageAge(Iterable<Person> myPeople) {
@@ -82,7 +82,7 @@ public class CollectionModelApplication {
         System.out.print("ID\t\tName\t\tAge\n");
         System.out.print("=============================\n");
         for (Person person : myPeople) {
-            System.out.printf("%d\t\t%s\t\t%d\n", person.getId(), person.getName(), person.getAge());
+            System.out.printf("%d\t\t%s\t\t%d\n", person.id(), person.name(), person.age());
         }
         System.out.print("=============================\n");
     }

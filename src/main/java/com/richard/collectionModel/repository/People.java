@@ -16,7 +16,7 @@ public interface People extends CrudRepository<Person, Long>, PagingAndSortingRe
         double average = 0.0;
         for (Person person : collection) {
             numberOfPeople++;
-            totalAge += person.getAge();
+            totalAge += person.age();
         }
         if (numberOfPeople == 0) {
             return average;
@@ -29,7 +29,7 @@ public interface People extends CrudRepository<Person, Long>, PagingAndSortingRe
     default Person findOldest(Iterable<Person> collection) {
         Person oldestPerson = null;
         for (Person person : collection) {
-            if (oldestPerson == null || oldestPerson.getAge() < person.getAge()) {
+            if (oldestPerson == null || oldestPerson.age() < person.age()) {
                 oldestPerson = person;
             }
         }
@@ -40,7 +40,7 @@ public interface People extends CrudRepository<Person, Long>, PagingAndSortingRe
     default Person findYoungest(Iterable<Person> collection) {
         Person youngestPerson = null;
         for (Person person : collection) {
-            if (youngestPerson == null || youngestPerson.getAge() > person.getAge()) {
+            if (youngestPerson == null || youngestPerson.age() > person.age()) {
                 youngestPerson = person;
             }
         }
