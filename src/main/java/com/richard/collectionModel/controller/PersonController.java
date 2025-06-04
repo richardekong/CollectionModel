@@ -95,5 +95,4 @@ public class PersonController {
         return ResponseEntity.ok(page.getContent());
     }
 
-
 }
