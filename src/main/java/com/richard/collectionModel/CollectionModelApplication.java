@@ -1,7 +1,7 @@
 package com.richard.collectionModel;
 
 import com.richard.collectionModel.model.Person;
-import com.richard.collectionModel.repository.People;
+import com.richard.collectionModel.service.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -14,7 +14,7 @@ import java.util.List;
 public class CollectionModelApplication {
 
     @Autowired
-    People peopleDB;
+    PeopleService peopleService;
 
     public static void main(String[] args) {
         SpringApplication.run(CollectionModelApplication.class, args);
@@ -26,7 +26,7 @@ public class CollectionModelApplication {
 
             System.out.println("\n\n\nListing the people from database\n");
 
-            Iterable<Person> myPeople = peopleDB.findAll();
+            Iterable<Person> myPeople = peopleService.findAll();
 
             printPeopleFromDB(myPeople);
 
@@ -42,40 +42,40 @@ public class CollectionModelApplication {
                     new Person(null,"Victor", 23)
             );
 
-            peopleDB.saveAll(people);
+            peopleService.saveAll(people);
 
             System.out.println("Listing the people from database again\n");
 
-            myPeople = peopleDB.findAll();
+            myPeople = peopleService.findAll();
 
             printPeopleFromDB(myPeople);
 
             // calculate the average age
-            printAverageAge(myPeople);
+            printAverageAge();
 
             // Get the youngest person
-            printYoungestPersonFromDB(myPeople);
+            printYoungestPersonFromDB();
 
             // Get the oldest person
-            printOldestPersonFromDB(myPeople);
+            printOldestPersonFromDB();
         };
     }
 
-    private void printOldestPersonFromDB(Iterable<Person> myPeople) {
+    private void printOldestPersonFromDB() {
         System.out.println("The oldest Person is:\n");
-        Person oldest = peopleDB.findOldest(myPeople);
+        Person oldest = peopleService.findOldest();
         System.out.printf("\t\tID: %d\n\t\tName: %s\n\t\tAge: %d\n\n", oldest.id(), oldest.name(), oldest.age());
     }
 
-    private void printYoungestPersonFromDB(Iterable<Person> myPeople) {
+    private void printYoungestPersonFromDB() {
         System.out.println("The Youngest Person is:\n");
-        Person youngest = peopleDB.findYoungest(myPeople);
+        Person youngest = peopleService.findYoungest();
         System.out.printf("\t\tID: %d\n\t\tName: %s\n\t\tAge: %d\n\n", youngest.id(), youngest.name(), youngest.age());
     }
 
-    private void printAverageAge(Iterable<Person> myPeople) {
+    private void printAverageAge() {
         System.out.println("\n\nCalculating the average age\n");
-        System.out.printf("Average Age: %f\n\n", peopleDB.findAverageAge(myPeople));
+        System.out.printf("Average Age: %f\n\n", peopleService.findAverageAge());
     }
 
     private void printPeopleFromDB(Iterable<Person> myPeople) {
