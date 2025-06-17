@@ -3,6 +3,7 @@ package com.richard.collectionModel.controller;
 
 import com.richard.collectionModel.model.Person;
 import com.richard.collectionModel.repository.People;
+import com.richard.collectionModel.service.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,16 +22,16 @@ import java.util.Optional;
 @RequestMapping("/api/people")
 public class PersonController {
 
-    private final People people;
+    private final PeopleService service;
 
     @Autowired
-    public PersonController(People people) {
-        this.people = people;
+    public PersonController(PeopleService people) {
+        this.service = people;
     }
 
     @PostMapping
-    private ResponseEntity<Void> createPerson(@RequestBody Person person, UriComponentsBuilder ucb){
-        if (people.existsByName(person.name())){
+    private ResponseEntity<Void> createPerson(@RequestBody Person person, UriComponentsBuilder ucb) throws Exception {
+        if (service.existsByName(person.name())){
             System.out.printf("\n\n%s already exists in the database",person.name());
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
@@ -39,7 +40,7 @@ public class PersonController {
                 person.name(),
                 person.age()
         );
-        Person createdPerson = people.save(personToCreate);
+        Person createdPerson = service.save(personToCreate);
         URI personLocation = ucb.path("api/people/{id}")
                 .buildAndExpand(createdPerson.id())
                 .toUri();
@@ -48,8 +49,8 @@ public class PersonController {
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity<Person> findById(@PathVariable Long id){
-        Optional<Person> optionalPerson = people.findById(id);
+    private ResponseEntity<Person> findById(@PathVariable Long id) throws Exception {
+        Optional<Person> optionalPerson = service.findById(id);
         if (optionalPerson.isPresent()){
             Person foundPerson = optionalPerson.get();
             System.out.printf("\n\nPerson with id number %d is:\n%s\n\n",id,foundPerson);
@@ -59,16 +60,16 @@ public class PersonController {
     }
 
     @GetMapping("/average")
-    private ResponseEntity<Double> findAverageAge(){
-        double averageAge = people.findAverageAge(people.findAll());
+    private ResponseEntity<Double> findAverageAge() throws Exception {
+        double averageAge = service.findAverageAge();
         System.out.printf("\n\nAverage Age is:%f\n\n",averageAge);
         return ResponseEntity.ok(averageAge);
     }
 
     @GetMapping("/youngest")
-    private ResponseEntity<Person> findYoungest(){
-        Iterable<Person> collection = people.findAll();
-        Person youngest = people.findYoungest(collection);
+    private ResponseEntity<Person> findYoungest() throws Exception {
+        Iterable<Person> collection = service.findAll();
+        Person youngest = service.findYoungest();
         if(youngest != null){
             System.out.println(youngest);
             return ResponseEntity.ok(youngest);
@@ -77,9 +78,9 @@ public class PersonController {
     }
 
     @GetMapping("/oldest")
-    private ResponseEntity<Person> findOldest(){
-        Iterable<Person> collection = people.findAll();
-        Person oldestPerson = people.findOldest(collection);
+    private ResponseEntity<Person> findOldest() throws Exception {
+        Iterable<Person> collection = service.findAll();
+        Person oldestPerson = service.findOldest();
         if(oldestPerson != null){
             System.out.println(oldestPerson);
             return ResponseEntity.ok(oldestPerson);
@@ -88,13 +89,13 @@ public class PersonController {
     }
 
     @GetMapping
-    private ResponseEntity<List<Person>> findAll(Pageable pageInfo){
+    private ResponseEntity<List<Person>> findAll(Pageable pageInfo) throws Exception {
         PageRequest request = PageRequest.of(
                 pageInfo.getPageNumber(),
                 pageInfo.getPageSize(),
                 pageInfo.getSortOr(Sort.by(Sort.Direction.ASC, "id"))
         );
-        Page<Person> page = people.findAll(request);
+        Page<Person> page = service.findAll(request);
         System.out.println(page.getContent());
         return ResponseEntity.ok(page.getContent());
     }
