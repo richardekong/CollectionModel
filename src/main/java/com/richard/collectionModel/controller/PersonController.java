@@ -2,7 +2,6 @@ package com.richard.collectionModel.controller;
 
 
 import com.richard.collectionModel.model.Person;
-import com.richard.collectionModel.repository.People;
 import com.richard.collectionModel.service.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -68,7 +67,6 @@ public class PersonController {
 
     @GetMapping("/youngest")
     private ResponseEntity<Person> findYoungest() throws Exception {
-        Iterable<Person> collection = service.findAll();
         Person youngest = service.findYoungest();
         if(youngest != null){
             System.out.println(youngest);
@@ -79,7 +77,6 @@ public class PersonController {
 
     @GetMapping("/oldest")
     private ResponseEntity<Person> findOldest() throws Exception {
-        Iterable<Person> collection = service.findAll();
         Person oldestPerson = service.findOldest();
         if(oldestPerson != null){
             System.out.println(oldestPerson);
